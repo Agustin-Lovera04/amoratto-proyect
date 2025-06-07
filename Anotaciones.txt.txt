@@ -1,0 +1,101 @@
+RECURSOS INFORMACION
+
+  https://chatgpt.com/c/68363259-370c-800d-9d5f-c4e529f22b37
+
+
+        Restricciones conocidas para sendList (según WhatsApp):
+        Cada fila (row) de la lista:
+        id: obligatorio, string corto (máx. ~200 caracteres, pero es mejor mantenerlo breve)
+
+        title: obligatorio, máx. 24 caracteres
+
+        description: opcional, máx. 72 caracteres
+
+                | Elemento                | Límite              |
+        | ----------------------- | ------------------- |
+        | **Secciones por lista** | 10 secciones máximo |
+        | **Filas por sección**   | 10 elementos máximo |
+
+
+
+
+
+
+
+        1- Crear portfolio comercial ( meta bussines suite )
+
+        try {
+          await mongoose.connect(
+            "mongodb+srv://AgustinLovera:45507271Udmv@cluster0.govus.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+            { dbName: "botWSP-test" }
+          );
+          console.log("Conexion Existosa con DB");
+        } catch (error) {
+          console.log("error al conectarse a BD" + error.messagge);
+        }
+
+  https://www.youtube.com/watch?v=r5Q5M66pxaY
+
+
+
+
+--------------------------------------------------------------------------------
+RECORDAR ACOMODAR IPS DE BASE DE DATOS
+--------------------------------------------------------------------------------
+
+Analizar como mierda vasmo a ahce con las listas para modificar los productos desde una interfaz, es conveniente? ue estrategia usamos? Date aire y ´pensa bien, busca ayuda.
+
+
+ATENCION: NO OLVIDAR
+  
+  # ya estan funcionando las interfazes, ahora falta darles funcionalida
+    -Validacion codigo OK
+
+  -Ver si se peude simplicar logica
+
+  -Parece que todo el flujo anda, falta defensa de errores. e interfacez y acomodar la logica para esos interfacez.
+
+  -Canjeo de prods (HARCOD) xxxx 
+  -Consulta Carta (HARDOC) XXXX
+
+
+
+
+
+
+ATENCION GRAFICO:
+  Interfaz grafica, recordar: 
+    - Valiodacion de CODIGO.
+    - Modificar menu del dia
+    - Modificar productos canjeables.
+    - Cargarle puntos a cliente dp de la compra
+
+
+
+
+  
+EXTERNO ( PEDIRLE JULIAN ).
+    -Numero nunca usado para whatsApp.
+    -Productos canjables ( solo la primera vez  para que se creen los mdoelos y correcto funcionamiento )
+    -Menu del dia ( """""" )
+    -Crear cuentas y enviarle los datos.
+
+
+
+
+AVANZES
+  -Consutla de putnos para nuevos y viejos clientes. ( EN DB )
+  -Validar codigo canje
+  -LOGIN BASICO Y AUTORIZACION MIDDLE
+
+
+
+  
+
+
+A FUTURO:
+   · Vamos a empezar a trabajar como nosotros sabemos con mongoose y eso, se que vamos a desaprovechar ahora algunas funcionalidades del bot, pero me va a correr el teimpo, despues hacemos tood bien, consultarle a lchat si esta  muy mal que no utiliz la funcionalidad del DB del bot
+
+   · Vamos a generar un express simple para poder hacer las interfazes en el mimso node que el bot ( no es tan escalable, pero por ahora va a servir )
+
+

@@ -1,0 +1,43 @@
+<h1>LOGIN</h1>
+{{#if msg}}
+    <h2> {{msg}} </h2>
+{{/if}}
+<form id="formLogin">
+<label>Ingrese usuario<input type="text" id="user" required></label>
+<label>Ingrese contraseña<input type="password" id="password" required></label>
+<button type="submit">Ingresar</button>
+</form>
+
+
+<script>
+    const form = document.getElementById('formLogin')
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        let user = document.getElementById('user').value
+        let password = document.getElementById('password').value
+
+        if(!user || user.length === 0 || !password || password.length === 0) {
+            return window.location.href = '/?msg=error-Controle datos ingresados' 
+        }
+
+        try{
+            let response = await fetch ('/', {
+                method: 'post',
+                  headers: {
+                        'Content-Type': 'application/json'
+                    },
+                body: JSON.stringify({user, password})
+            })
+
+            let data = await response.json()
+            if(data.error){
+                return window.location.href = `/?msg=${data.error}` 
+            }
+
+            return window.location.href = '/home'
+
+        }catch(error){
+            return window.location.href = `/?msg=Error interno - Alertar error` 
+        }
+    })
+</script>

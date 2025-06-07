@@ -1,0 +1,26 @@
+<h1>Cargar Puntos</h1>
+
+<div id="response"></div>
+
+<form id="formCargarPuntos">
+    <label>Ingrese numero de telefono<input type="tel" id="number" placeholder="3424076088" required></label>
+    <label>Ingrese importe de compra<input type="number" id="valor" placeholder="3200" required></label>
+    <button type="submit">Cargar</button>
+</form>
+
+
+
+<a href="/logout">Cerrar Sesion</a>
+
+
+<script>
+    const response = document.getElementById('response')
+    const form = document.getElementById('formCargarPuntos').addEventListener('submit', async ( e ) => {
+        let numero = document.getElementById('number').value
+        let valor = document.getElementById('valor').value
+        if(!numero||numero.length === 0 || !valor||valor.length === 0){
+            return response.innerHTML = ' Debes enviar valores correctos recordar ej: 3424076088  -  3200'
+        }   
+        numero = `549${numero}`
+    })
+</script>

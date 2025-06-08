@@ -31,9 +31,14 @@ router.get('/api/amoratto/cargarPuntos', auth, AdminController.renderCargarPunto
 router.post('/api/amoratto/cargarPuntos', auth, AdminController.cargarPuntos)
 
 
-router.get('/api/amoratto/cambiosProdCan', auth, (req,res)=> {
-    return res.render('cambiosProdCan')
-})
+router.get('/api/amoratto/cambiosProdCan', auth, AdminController.renderCambiosProdCan)
+
+router.post('/api/amoratto/nuevoProducto', auth, AdminController.nuevoProducto)
+
+router.post('/api/amoratto/desactivarProducto', auth, AdminController.desactivarProducto)
+
+
+
 router.get('/api/amoratto/cambiosCarta', auth, (req,res)=> {
     return res.render('cambiosCarta')
 })

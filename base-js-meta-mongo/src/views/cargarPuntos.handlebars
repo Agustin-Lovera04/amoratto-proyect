@@ -14,13 +14,33 @@
 
 
 <script>
-    const response = document.getElementById('response')
+    const div = document.getElementById('response')
     const form = document.getElementById('formCargarPuntos').addEventListener('submit', async ( e ) => {
+        e.preventDefault()
         let numero = document.getElementById('number').value
         let valor = document.getElementById('valor').value
         if(!numero||numero.length === 0 || !valor||valor.length === 0){
-            return response.innerHTML = ' Debes enviar valores correctos recordar ej: 3424076088  -  3200'
+            return div.innerHTML = ' Debes enviar valores correctos recordar ej: 3424076088  -  3200'
         }   
         numero = `549${numero}`
+
+        try{
+            let response = await fetch('/api/amoratto/cargarpuntos', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({numero, valor})
+            })
+
+            let data = await response.json()
+
+            if(data.error){
+                return div.innerHTML = `${data.error}`
+            }
+            return div.innerHTML = `Carga realizada con exito - Puntos totales de cliente: ${data.puntos} `
+        }catch(error){
+            return div.innerHTML = 'Error interno - Alertar error.'
+        }
     })
 </script>

@@ -1,3 +1,89 @@
 <h1>Cambiar productos canejables</h1>
+    {{#if msg}}
+        {{msg}}
+    {{/if}}
+    <div id="response"></div>
+    <form id="formNewProduct">
+        <label>Ingrese nombre de producto<input type="text" placeholder="Helado 1/4" required maxlength="24" id="title"></label>
+        <label>Ingrese descripcion<input type="text" placeholder="Gustos a elección" required maxlength="42" id="descripcion"></label>
+        <label>Ingrese puntos requeridos para canjear<input type="number" required id="puntos"></label>
+        <button type="submit">Crear</button>
+    </form>
+
+    <h1>Productos activos</h1>
+    {{#each products}}
+        Titulo: {{this.title}} <br>
+        Descripcion: {{this.description}} <br>
+        Puntos requeridos: {{this.puntos}} <br>
+        <button onclick="desactivarProducto('{{this._id}}')">Desactivar</button><br> <hr>
+    {{/each}}
 
 <a href="/logout">Cerrar Sesion</a>
+
+
+<script>
+    let div = document.getElementById('response')
+    const form = document.getElementById('formNewProduct').addEventListener('submit', async ( e ) => {
+        e.preventDefault()
+        div.innerHTML= ''
+
+        let title = document.getElementById('title').value
+        let descripcion = document.getElementById('descripcion').value
+        let puntos = document.getElementById('puntos').value
+
+        if(!title || title.length > 24){
+            div.innerHTML = 'Titulo excede la cantidad de caracteres permitidos'
+        }
+    
+        
+        if(!descripcion || descripcion.length > 46){
+            div.innerHTML = 'Descripcion excede la cantidad de caracteres permitidos'
+        }
+
+
+        try{
+            let response = await fetch('/api/amoratto/nuevoProducto', {
+                method: 'post',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({title, descripcion, puntos})
+            })
+
+            let data = await response.json()
+
+
+            if(data.error){
+            return div.innerHTML = `${data.error}`
+            }
+
+           return window.location.href = '/api/amoratto/cambiosProdCan/?msg=Producto canjeable creado con exito.'
+        }catch(error){
+            return div.innerHTML = 'Error interno - Alertar error'
+        }
+
+
+    })
+
+    async function desactivarProducto(id){
+        try{
+            let response = await fetch('/api/amoratto/desactivarProducto', {
+                method: 'post',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id})
+            })
+
+            let data = await response.json()
+
+            if(data.error){
+            return div.innerHTML = `${data.error}`
+            }
+
+           return window.location.href = '/api/amoratto/cambiosProdCan/?msg=Producto eliminado con exito'
+        }catch(error){
+            return div.innerHTML = 'Error interno - Alertar error'
+        }
+    }
+</script>

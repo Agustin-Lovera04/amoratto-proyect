@@ -43,32 +43,13 @@ RECURSOS INFORMACION
 RECORDAR ACOMODAR IPS DE BASE DE DATOS
 --------------------------------------------------------------------------------
 
-Analizar como mierda vasmo a ahce con las listas para modificar los productos desde una interfaz, es conveniente? ue estrategia usamos? Date aire y ´pensa bien, busca ayuda.
-
-
-ATENCION: NO OLVIDAR
-  
-  # ya estan funcionando las interfazes, ahora falta darles funcionalida
-    -Validacion codigo OK
-
-  -Ver si se peude simplicar logica
-
-  -Parece que todo el flujo anda, falta defensa de errores. e interfacez y acomodar la logica para esos interfacez.
-
-  -Canjeo de prods (HARCOD) xxxx 
-  -Consulta Carta (HARDOC) XXXX
-
-
-
-
-
 
 ATENCION GRAFICO:
   Interfaz grafica, recordar: 
-    - Valiodacion de CODIGO.
-    - Modificar menu del dia
-    - Modificar productos canjeables.
-    - Cargarle puntos a cliente dp de la compra
+    - Valiodacion de CODIGO.    -OK
+    - Cargarle puntos a cliente dp de la compra   -OK
+    - Modificar productos canjeables. -OK
+    - Modificar carta
 
 
 
@@ -87,6 +68,24 @@ AVANZES
   -Consutla de putnos para nuevos y viejos clientes. ( EN DB )
   -Validar codigo canje
   -LOGIN BASICO Y AUTORIZACION MIDDLE
+  -Cargar puntos despues de compra
+  -Cambiar prod cajeables, crear y eliminar
+
+
+PUNTUAL
+
+    PUNTO DE INFLEXION:
+      Desición: Carta dependera de mi ( pocos cambios )
+      - Clean code + Defensa de errores
+      - Estetica
+      - Testing
+      - Hablar con julian ( pedir faltantes y explicar dependencias )
+      - Produccion
+      - Presentacion
+
+
+
+
 
 
 
@@ -99,3 +98,5 @@ A FUTURO:
    · Vamos a generar un express simple para poder hacer las interfazes en el mimso node que el bot ( no es tan escalable, pero por ahora va a servir )
 
 
+
+  · Darse unos dias mas, faltando una semana para el Sprint -  Cambios de arta mas bienm que dependan de mi por ahora.

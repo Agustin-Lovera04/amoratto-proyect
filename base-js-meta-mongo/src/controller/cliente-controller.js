@@ -1,3 +1,4 @@
+import { adminService } from "../services/admin-service.js";
 import { clienteService } from "../services/clientes-service.js";
 
 
@@ -37,5 +38,23 @@ export class ClienteController{
         }
 
         return {code:modPuntos.codeCanje }
+    }
+
+
+    static async getProducts(){
+        let products = await adminService.getProducts()
+        if(products.error){
+            return {error: products.error}            
+        }
+        return products
+    }
+
+    static async getProductoById(id){
+        let product = await adminService.getProductoById(id)
+        if(product.error){
+            return {error: product.error}
+        }
+
+        return product
     }
 }

@@ -11,47 +11,68 @@ dotenv.config()
 const PORT = process.env.PORT ?? 3008
 
 
-//BOTONES DE CANJE
-const prod1Flow = addKeyword(['PROD_1_ID_CANJE']).addAnswer('Procesando canje...', null, 
-    async(ctx, {flowDynamic}) => {
-        let processCanje = await ClienteController.processCanje(ctx.from, 50, 'Helado 1 Bocha')
-        if(processCanje.error){
-            await flowDynamic(processCanje.error)
-        }else{
-            await flowDynamic(`Tu codigo de canje es: *${processCanje.code}* - Presenta este codigo en nuestra sucursal y obtene tu premio.`)
-        }
+// --- FLUJO DE CANJE DINÁMICO ---
+
+// 1. Flow que procesa el canje de cualquier producto seleccionado
+const canjeProductoFlow = addKeyword(['']) // No ponemos palabras clave, se activa por selección de producto
+  .addAnswer('Procesando canje...', null, 
+    async (ctx, { flowDynamic, gotoFlow }) => {
+      // El ID del producto seleccionado llega en ctx.body (ajusta si tu provider lo envía en otro campo)
+      const productoId = ctx.body;
+
+      // Buscamos el producto en MongoDB usando el controlador
+      const producto = await ClienteController.getProductoById(productoId);
+      if (producto.error) {
+        await flowDynamic(`Error en sistema - Intente mas tarde.`);
+        return gotoFlow(escapeActionFlow); 
+      }
+
+      // Procesamos el canje con los datos del producto
+      let processCanje = await ClienteController.processCanje(ctx.from, producto.puntos, producto.title);
+      if (processCanje.error) {
+        await flowDynamic(`${processCanje.error}`);
+      } else {
+        await flowDynamic(`Tu codigo de canje es: *${processCanje.code}* - Presenta este codigo en nuestra sucursal y obtene tu premio.`);
+      }
+      return gotoFlow(escapeActionFlow); 
     }
-).addAction(async (ctx, { gotoFlow }) => {
-    return gotoFlow(escapeActionFlow)
-})
+  )
 
-const prod2Flow = addKeyword(['PROD_2_ID_CANJE']).addAnswer('Procesando canje...', null, 
-    async(ctx, {flowDynamic}) => {
-        let processCanje = await ClienteController.processCanje(ctx.from, 25, 'Desayuno simple')
-        if(processCanje.error){
-            await flowDynamic(processCanje.error)
-        }else{
-            await flowDynamic(`Tu codigo de canje es: *${processCanje.code}* - Presenta este codigo en nuestra sucursal y obtene tu premio.`)
-        }
+// 2. Flow que muestra la lista dinámica de productos de canje
+const canjearFlow = addKeyword(['Canjear Producto']).addAnswer(
+  'Aquí tienes los productos disponibles para canjear:',
+  null,
+  async (ctx, { provider, flowDynamic, gotoFlow }) => {
+    const productsToRedeem = await ClienteController.getProducts();
+
+    if (!Array.isArray(productsToRedeem) || productsToRedeem.length === 0) {
+      await flowDynamic('No hay productos disponibles para canjear en este momento.');
+      return gotoFlow(escapeActionFlow); // O flow que quieras para salir o menú
     }
-).addAction(async (ctx, { gotoFlow }) => {
-    return gotoFlow(escapeActionFlow)
-})
 
-const prod3Flow = addKeyword(['PROD_3_ID_CANJE']).addAnswer('Procesando canje...', null, 
-    async(ctx, {flowDynamic}) => {
-        let processCanje = await ClienteController.processCanje(ctx.from, 75, 'Torta de Pistacho')
-        if(processCanje.error){
-            await flowDynamic(processCanje.error)
-        }else{
-            await flowDynamic(`Tu codigo de canje es: *${processCanje.code}* - Presenta este codigo en nuestra sucursal y obtene tu premio.`)
-        }
-    }
-).addAction(async (ctx, { gotoFlow }) => {
-    return gotoFlow(escapeActionFlow)
-})
+    // Validar que cada producto tenga id y title
+    const rows = productsToRedeem.map(p => ({
+      id: p._id.toString(),
+      title: p.title || 'Sin título',
+      description: `${p.description || ''} - Coste: ${p.puntos} puntos`
+    }));
 
+    const sections = [{
+      title: 'Productos Disponibles',
+      rows: rows.slice(0, 10) // Limitar máximo 10 filas por sección
+    }];
 
+    const listMessage = {
+      header: { type: "text", text: "Elige tu recompensa" },
+      body: { text: "Selecciona el producto que te gustaría canjear de la lista a continuación:" },
+      footer: { text: "Gracias por elegirnos!" },
+      action: { button: "Ver Productos", sections }
+    };
+
+    await provider.sendList(ctx.from, listMessage);
+  },
+  [canjeProductoFlow]
+);
 
 
 //Consutla de puntos
@@ -76,7 +97,7 @@ const puntosFlow = addKeyword(['Consultar Puntos']).addAnswer('Consultando punto
 
 
 
-
+/* 
 // LISTA CANJEAR PRODUCTOS
 const canjearFlow = addKeyword(['Canjear Producto']).addAnswer(
     'Aquí tienes los productos disponibles para canjear:',
@@ -105,7 +126,7 @@ const canjearFlow = addKeyword(['Canjear Producto']).addAnswer(
     },
     [prod1Flow, prod2Flow, prod3Flow]
 )
-
+ */
 
 
 /* Opciones */

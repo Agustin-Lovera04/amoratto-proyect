@@ -61,7 +61,8 @@ export class AdminController {
         let {code} = req.body
 
         if(!code){
-            return {error: 'Error interno - Contacte a un administrador.'}
+            res.setHeader('Content-Type','application/json');
+            return res.status(404).json({error: 'Error interno - Alerte error'});
         }
 
         let valid = await adminService.validCode(code)
@@ -83,12 +84,91 @@ export class AdminController {
     }
 
     static async cargarPuntos(req,res){
+      let { numero, valor } = req.body
+      if(!numero || numero.length === 0 || !valor || valor.length === 0 ){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: 'Error interno - Alerte error'});
+      }
       
+      let puntos;
+      valor = parseInt(valor);
+
+      if (valor <= 3500) {
+        puntos = 5;
+      } else if (valor <= 7500) {
+        puntos = 10;
+      } else {
+        puntos = 15;
+      }
+
+      let cargarPuntos = await adminService.cargarPuntos(numero, puntos)
+      if(cargarPuntos.error){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: cargarPuntos.error});
+      }
+
+
+
+      res.setHeader('Content-Type','application/json');
+      return res.status(200).json({puntos: cargarPuntos.puntos});
     }
 
 
 
+//CAMBIOS PRODUCTOS CANJEABLES--------------------------------------------------------------------------------------------------
 
+    static async renderCambiosProdCan(req,res){
+      let {msg} = req.query
+      if(!msg){
+        msg = null
+      }
+
+      let products = await adminService.getProducts()
+      if(products.error){
+        msg = products.error
+        products = null
+      }
+      return res.render('cambiosProdCan', {msg, products})
+    }
+
+    static async nuevoProducto(req,res){
+      let { title, descripcion, puntos } = req.body
+
+      if(!title || !descripcion || !puntos){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: 'Error interno - Alerte error'});
+      }
+
+      let nuevoProducto = await adminService.nuevoProducto(title, descripcion,puntos)
+      if(nuevoProducto.error){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: nuevoProducto.error});
+      }
+
+      res.setHeader('Content-Type','application/json');
+      return res.status(200).json({ok: nuevoProducto});
+    }
+
+//--------------------------------------------------------------------------------------------------
+
+
+//DESACTIVCAR PRODUCTOS CANJEABLES--------------------------------------------------------------------------------------------------
+    static async desactivarProducto(req,res){
+      let {id} = req.body
+      if(!id){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: 'Error interno - Alerte error'});
+      }
+
+      let desactivarProducto = await adminService.desactivarProducto(id)
+      if(desactivarProducto.error){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: desactivarProducto.error});
+      }
+
+      res.setHeader('Content-Type','application/json');
+      return res.status(200).json({ok: 'ok'});
+    }
 
 
 }

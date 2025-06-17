@@ -1,13 +1,28 @@
-<h1>LOGIN</h1>
-{{#if msg}}
-    <h2> {{msg}} </h2>
-{{/if}}
-<form id="formLogin">
-<label>Ingrese usuario<input type="text" id="user" required></label>
-<label>Ingrese contraseña<input type="password" id="password" required></label>
-<button type="submit">Ingresar</button>
-</form>
+<div class="container-fluid d-flex align-items-center justify-content-center">
+  <div class="card shadow p-5 rounded-4 bg-white" style="max-width: 400px; width: 100%;">
+    <h1 class="h3 text-center text-primary fw-bold mb-4">Iniciar sesión</h1>
 
+    {{#if msg}}
+      <div class="alert alert-danger text-center">
+        {{msg}}
+      </div>
+    {{/if}}
+
+    <form id="formLogin">
+      <div class="mb-3">
+        <label for="user" class="form-label fw-semibold">Usuario</label>
+        <input type="text" class="form-control form-control-lg" id="user" required placeholder="ej: juan123">
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label fw-semibold">Contraseña</label>
+        <input type="password" class="form-control form-control-lg" id="password" required placeholder="********">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg w-100">Ingresar</button>
+    </form>
+  </div>
+</div>
 
 <script>
     const form = document.getElementById('formLogin')

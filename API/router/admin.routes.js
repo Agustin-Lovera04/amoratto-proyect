@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { auth } from "../../middleware/middleware.js";
-import { AdminController } from "../../controller/admin-controller.js";
+import { auth } from "../middleware/middleware.js";
+import { AdminController } from "../controller/admin-controller.js";
 
 export const router = Router()
 
@@ -26,9 +26,12 @@ router.post('/api/amoratto/validarCodigo', auth, AdminController.validCode)
 
 
 
-router.get('/api/amoratto/cargarPuntos', auth, AdminController.renderCargarPuntos)
+router.get('/api/amoratto/cargarDinero', auth, AdminController.renderCargarDinero)
 
-router.post('/api/amoratto/cargarPuntos', auth, AdminController.cargarPuntos)
+router.post('/api/amoratto/cargarDinero', auth, AdminController.cargarDinero)
+
+router.get('/api/amoratto/renderRecomDinero', auth, AdminController.renderRecomDinero)
+router.post('/api/amoratto/recomDinero', auth, AdminController.recomDinero)
 
 
 router.get('/api/amoratto/cambiosProdCan', auth, AdminController.renderCambiosProdCan)
@@ -38,7 +41,5 @@ router.post('/api/amoratto/nuevoProducto', auth, AdminController.nuevoProducto)
 router.post('/api/amoratto/desactivarProducto', auth, AdminController.desactivarProducto)
 
 
-
-router.get('/api/amoratto/cambiosCarta', auth, (req,res)=> {
-    return res.render('cambiosCarta')
-})
+router.get('/api/amoratto/renderPagarDinero', auth, AdminController.renderPagarDinero)
+router.post('/api/amoratto/pagarDinero', auth, AdminController.pagarDinero)

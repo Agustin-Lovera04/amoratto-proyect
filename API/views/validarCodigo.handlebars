@@ -1,0 +1,50 @@
+<div class="container-fluid  d-flex align-items-center justify-content-center">
+  <div class="card shadow-lg p-5 rounded-4 bg-white" style="max-width: 480px; width: 100%;">
+    <h1 class="h3 text-center mb-4 text-primary fw-bold">Validar Código</h1>
+
+    <div id="response" class="text-center mb-3"></div>
+
+    <form id="formCode">
+      <div class="mb-4">
+        <label for="code" class="form-label fw-semibold">Código de canje</label>
+        <input type="text" id="code" class="form-control form-control-lg border-primary" placeholder="Ej: ABC123" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg w-100">Validar</button>
+    </form>
+
+    <div class="text-center mt-4">
+    <a href="/home" class="btn btn-secondary">Volver al panel</a>
+      <a href="/logout" class="btn btn-outline-secondary btn-sm">Cerrar sesión</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    let div = document.getElementById('response')
+    const form = document.getElementById('formCode').addEventListener('submit', async ( e ) => {
+        e.preventDefault()
+
+        let code = document.getElementById('code').value
+
+        try{
+            let response = await fetch('/api/amoratto/validarCodigo', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({code})
+            })
+
+            let data = await response.json()
+            if(data.error){
+                return div.innerHTML = `<h3 class="alert alert-danger">${data.error}</h3>`
+            }
+
+
+            return div.innerHTML = `<h3 class="alert alert-success">Codigo valido - Procede a entregrarle: -  <strong>${data.title}</strong>  -  al cliente. </h3>`
+        }catch(error){
+            return div.innerHTML = 'ERROR INTERNO - ALERTE ERROR'
+        }
+    })
+</script>

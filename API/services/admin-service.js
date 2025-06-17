@@ -28,6 +28,10 @@ class AdminService{
     async desactivarProducto(id){
         return await this.dao.desactivarProducto(id)
     }
+
+    async pagarDinero(numero, valor){
+        return await this.dao.pagarDinero(numero,valor)
+    }
 } 
 
 

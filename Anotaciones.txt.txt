@@ -17,26 +17,7 @@ RECURSOS INFORMACION
         | **Filas por sección**   | 10 elementos máximo |
 
 
-
-
-
-
-
-        1- Crear portfolio comercial ( meta bussines suite )
-
-        try {
-          await mongoose.connect(
-            "mongodb+srv://AgustinLovera:45507271Udmv@cluster0.govus.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-            { dbName: "botWSP-test" }
-          );
-          console.log("Conexion Existosa con DB");
-        } catch (error) {
-          console.log("error al conectarse a BD" + error.messagge);
-        }
-
-  https://www.youtube.com/watch?v=r5Q5M66pxaY
-
-
+        https://www.youtube.com/watch?v=r5Q5M66pxaY
 
 
 --------------------------------------------------------------------------------
@@ -44,42 +25,39 @@ RECORDAR ACOMODAR IPS DE BASE DE DATOS
 --------------------------------------------------------------------------------
 
 
-ATENCION GRAFICO:
-  Interfaz grafica, recordar: 
-    - Valiodacion de CODIGO.    -OK
-    - Cargarle puntos a cliente dp de la compra   -OK
-    - Modificar productos canjeables. -OK
-    - Modificar carta
+PETICION DE JULIAN
+-- Ya migre puntos a dinero
+-- Depositar plata ( que lo cargue la empeleada en cargar dinero )
+-- Transferencia de plata entre numeros     
+-- Carta en excel separar
+-- Validacion de transferencia a uan cuenta inexistente
+-- Decidir productos canjeables
+-- Plata como opcion de pago en el mimso whatsapp ( ver si sacamos uno de los dis canales y que quede como: "pago con puntos" ( mas barato ) "pago con dinero")
 
 
+CAMBIOS YA REALIZADOS
+    Funcionalidad de BOT y Panel esta funcionando. 
+    Clean code ( comentarios, controlar repetciones inecesarias en controller y manager)
+    Pasar a produccion lo antes posible.
+    Ver como presentar funcionalidades de panel.
 
 
   
 EXTERNO ( PEDIRLE JULIAN ).
     -Numero nunca usado para whatsApp.
-    -Productos canjables ( solo la primera vez  para que se creen los mdoelos y correcto funcionamiento )
-    -Menu del dia ( """""" )
-    -Crear cuentas y enviarle los datos.
+    -CARTA produtos y precio ( """""" ) ===> OK
+    -Crear cuentas y enviarle los datos. ===> OK
 
-
-
-
-AVANZES
-  -Consutla de putnos para nuevos y viejos clientes. ( EN DB )
-  -Validar codigo canje
-  -LOGIN BASICO Y AUTORIZACION MIDDLE
-  -Cargar puntos despues de compra
-  -Cambiar prod cajeables, crear y eliminar
 
 
 PUNTUAL
 
     PUNTO DE INFLEXION:
       Desición: Carta dependera de mi ( pocos cambios )
-      - Clean code + Defensa de errores
-      - Estetica
-      - Testing
-      - Hablar con julian ( pedir faltantes y explicar dependencias )
+      - Clean code + Defensa de errores ( en api OK - whatsapp -OK) ( NO REPETIR EN MANAGER Y CONTRLLER)
+      - Estetica OK
+      - Testing -OK
+      - Hablar con julian ( pedir faltantes y explicar dependencias ) - OK
       - Produccion
       - Presentacion
 
@@ -89,6 +67,9 @@ PUNTUAL
 
 
 
+
+  VAMOS AMODULARIZAR - DOS SERVICIOS EN UN SOLO PROYECTO. ( como no vimos esto al pricnipio y no enloquecerme)
+https://gemini.google.com/app/d287bdd9af14f1c8
   
 
 
@@ -99,4 +80,4 @@ A FUTURO:
 
 
 
-  · Darse unos dias mas, faltando una semana para el Sprint -  Cambios de arta mas bienm que dependan de mi por ahora.
+

@@ -13,10 +13,6 @@ class ClienteService{
   async modDinero(numberID, coste,title){
     return await this.dao.modDinero(numberID, coste,title)
   }
-
-  async confirmTransferencia(importe,cuentaDestino,numberID){
-    return await this.dao.confirmTransferencia(importe,cuentaDestino,numberID)
-  }
   
 }
 

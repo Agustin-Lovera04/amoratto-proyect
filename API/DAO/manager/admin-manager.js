@@ -105,4 +105,29 @@ export class AdminManager {
             return {error: 'Error interno - Alerte error'}
         }
     }
+
+    async pagarDinero(numero, valor){
+        try {
+            let cliente = await clientesModel.findOne({numberID: numero})
+            if(!cliente){
+                return {error: 'No hay clientes registrados con el numero ingresado.'}
+            }
+            valor = valor - (valor * 0.05);
+
+            if(cliente.dinero < valor){
+                return {error: `Dinero en cuenta insuficiente. Tiene: $${cliente.dinero}`}
+            }
+
+            let result = cliente.dinero - valor
+
+            let pagarDinero = await clientesModel.updateOne({numberID: numero}, {dinero: result})
+            if(!pagarDinero){
+                return { error: 'Error interno - Alerte error'}
+            }
+
+            return {result}
+        } catch (error) {
+            return {error: 'Error interno - Alerte error'}
+        }
+    }
 }

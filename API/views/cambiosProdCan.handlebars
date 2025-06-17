@@ -1,24 +1,52 @@
-<h1>Cambiar productos canejables</h1>
+<div class="container py-5 bg-light">
+  <div class="mb-5">
+    <h1 class="text-primary fw-bold mb-3">Cambiar productos canjeables</h1>
+
     {{#if msg}}
-        {{msg}}
+      <div class="alert alert-warning text-center">{{msg}}</div>
     {{/if}}
-    <div id="response"></div>
-    <form id="formNewProduct">
-        <label>Ingrese nombre de producto<input type="text" placeholder="Helado 1/4" required maxlength="24" id="title"></label>
-        <label>Ingrese descripcion<input type="text" placeholder="Gustos a elección" required maxlength="42" id="descripcion"></label>
-        <label>Ingrese puntos requeridos para canjear<input type="number" required id="puntos"></label>
-        <button type="submit">Crear</button>
+
+    <div id="response" class="text-danger mb-3 text-center"></div>
+
+    <form id="formNewProduct" class="border rounded p-4 bg-white shadow-sm">
+      <div class="mb-3">
+        <label for="title" class="form-label">Nombre del producto</label>
+        <input type="text" class="form-control" id="title" placeholder="Helado 1/4" maxlength="24" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <input type="text" class="form-control" id="descripcion" placeholder="Gustos a elección" maxlength="42" required>
+      </div>
+
+      <div class="mb-4">
+        <label for="dinero" class="form-label">Costo en $ ARS</label>
+        <input type="number" class="form-control" id="dinero" required>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Crear Producto</button>
     </form>
+  </div>
 
-    <h1>Productos activos</h1>
+  <div>
+    <h2 class="text-primary fw-semibold mb-3">Productos activos</h2>
+
     {{#each products}}
-        Titulo: {{this.title}} <br>
-        Descripcion: {{this.description}} <br>
-        Puntos requeridos: {{this.puntos}} <br>
-        <button onclick="desactivarProducto('{{this._id}}')">Desactivar</button><br> <hr>
+      <div class="border rounded p-3 mb-3 bg-white shadow-sm">
+        <p><strong>Título:</strong> {{this.title}}</p>
+        <p><strong>Descripción:</strong> {{this.description}}</p>
+        <p><strong>Dinero requerido:</strong> {{this.dinero}}</p>
+        <button onclick="desactivarProducto('{{this._id}}')" class="btn btn-outline-danger">Desactivar</button>
+      </div>
     {{/each}}
+  </div>
 
-<a href="/logout">Cerrar Sesion</a>
+  <div class="text-center mt-5">
+    <a href="/home" class="btn btn-secondary">Volver al panel</a>
+    <a href="/logout" class="btn btn-secondary">Cerrar Sesión</a>
+  </div>
+</div>
+
 
 
 <script>
@@ -29,7 +57,7 @@
 
         let title = document.getElementById('title').value
         let descripcion = document.getElementById('descripcion').value
-        let puntos = document.getElementById('puntos').value
+        let dinero = document.getElementById('dinero').value
 
         if(!title || title.length > 24){
             div.innerHTML = 'Titulo excede la cantidad de caracteres permitidos'
@@ -47,7 +75,7 @@
                 headers:{
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({title, descripcion, puntos})
+                body: JSON.stringify({title, descripcion, dinero})
             })
 
             let data = await response.json()

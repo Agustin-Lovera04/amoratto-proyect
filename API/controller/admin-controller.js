@@ -79,40 +79,72 @@ export class AdminController {
     
 //CARGAR PUNTOS--------------------------------------------------------------------------------------------------
 
-    static async renderCargarPuntos(req,res){
-      return res.render('cargarPuntos')
+    static async renderCargarDinero(req,res){
+      return res.render('cargarDinero')
     }
 
-    static async cargarPuntos(req,res){
+    static async cargarDinero(req,res){
       let { numero, valor } = req.body
       if(!numero || numero.length === 0 || !valor || valor.length === 0 ){
         res.setHeader('Content-Type','application/json');
         return res.status(404).json({error: 'Error interno - Alerte error'});
       }
       
-      let puntos;
       valor = parseInt(valor);
 
-      if (valor <= 3500) {
-        puntos = 5;
-      } else if (valor <= 7500) {
-        puntos = 10;
-      } else {
-        puntos = 15;
-      }
 
-      let cargarPuntos = await adminService.cargarPuntos(numero, puntos)
-      if(cargarPuntos.error){
+      let cargarDinero = await adminService.cargarDinero(numero, valor)
+      if(cargarDinero.error){
         res.setHeader('Content-Type','application/json');
-        return res.status(404).json({error: cargarPuntos.error});
+        return res.status(404).json({error: cargarDinero.error});
       }
 
 
 
       res.setHeader('Content-Type','application/json');
-      return res.status(200).json({puntos: cargarPuntos.puntos});
+      return res.status(200).json({dinero: cargarDinero.dinero});
     }
 
+/* ---------------------------------------------------------------------------------------------------------------------------- */
+
+static async renderRecomDinero(req,res){
+      return res.render('recomDinero')
+  }
+
+
+
+  static async recomDinero(req,res){
+  let {numero, valor} = req.body
+    if(!numero || numero.length === 0 || !valor || valor.length === 0 ){
+      res.setHeader('Content-Type','application/json');
+      return res.status(404).json({error: 'Error interno - Alerte error'});
+    }
+    
+    valor = parseInt(valor);
+    let result;
+    if (valor < 6000) {
+      result = 0;
+    } else if (valor <= 10000) {
+      result = 1500;
+    } else if (valor <= 15000) {
+      result = 2500;
+    } else {
+      result = 3500;
+}
+
+    if(result === 0){
+     res.setHeader('Content-Type','application/json');
+     return res.status(404).json({error: 'Solo tienen recompensa las compras con un valor mayor a $6.000'}); 
+    }
+
+    let cargarDinero = await adminService.cargarDinero(numero, result)
+    if(cargarDinero.error){
+      res.setHeader('Content-Type','application/json');
+      return res.status(404).json({error: cargarDinero.error});
+    }
+    res.setHeader('Content-Type','application/json');
+    return res.status(200).json({dinero: cargarDinero.dinero});
+  }
 
 
 //CAMBIOS PRODUCTOS CANJEABLES--------------------------------------------------------------------------------------------------
@@ -132,14 +164,14 @@ export class AdminController {
     }
 
     static async nuevoProducto(req,res){
-      let { title, descripcion, puntos } = req.body
+      let { title, descripcion, dinero } = req.body
 
-      if(!title || !descripcion || !puntos){
+      if(!title || !descripcion || !dinero){
         res.setHeader('Content-Type','application/json');
         return res.status(404).json({error: 'Error interno - Alerte error'});
       }
 
-      let nuevoProducto = await adminService.nuevoProducto(title, descripcion,puntos)
+      let nuevoProducto = await adminService.nuevoProducto(title, descripcion,dinero)
       if(nuevoProducto.error){
         res.setHeader('Content-Type','application/json');
         return res.status(404).json({error: nuevoProducto.error});
@@ -170,5 +202,27 @@ export class AdminController {
       return res.status(200).json({ok: 'ok'});
     }
 
+
+//PAGAR CON PUNTOS--------------------------------------------------------------------------------------------------
+    static async renderPagarDinero(req,res){
+      return res.render('pagarDinero')
+    }
+
+    static async pagarDinero(req,res){
+      let {numero, valor} = req.body
+      if(!numero || numero.length === 0 || !valor || valor.length === 0 ){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: 'Error interno - Alerte error'});
+      }
+      
+      valor = parseInt(valor)
+      let pagarDinero = await adminService.pagarDinero(numero, valor)
+      if(pagarDinero.error){
+        res.setHeader('Content-Type','application/json');
+        return res.status(404).json({error: pagarDinero.error});
+      }
+      res.setHeader('Content-Type','application/json');
+      return res.status(200).json({dinero: pagarDinero.result});
+      }
 
 }

@@ -18,36 +18,39 @@ export class ClienteManager{
             return {error: `Error al crear cliente en DB: ${error.message}`}
         }
     }
-    async getCliente(numberID){
+    async getCliente(numberID) {
         try {
-            let cliente = await clientesModel.findOne({numberID: numberID})
-            if(!cliente){
-                let cliente = await this.createCliente(numberID)
-                cliente = cliente.createCliente
-                return {cliente: cliente ,nuevo: true}
+            let cliente = await clientesModel.findOne({ numberID })
+
+            if (!cliente) {
+                const nuevoCliente = await this.createCliente(numberID)
+
+                if (nuevoCliente.error) return nuevoCliente
+
+                return { cliente: nuevoCliente.createCliente, nuevo: true }
             }
-            
-            return {cliente: cliente}
+
+            return { cliente }
         } catch (error) {
-            console.log('entro a error', error)
-         return {error: `Error Interno ${error.message}`}   
+            return { error: `Error Interno ${error.message}` }
         }
     }
 
-    async modPuntos(numberID, coste, title){
+
+    async modDinero(numberID, coste, title){
         try {
             let cliente = await this.getCliente(numberID)
             if(!cliente.cliente){
                 return {error: 'Error interno - Contacte a un administrador'}
             }
-            let result = cliente.cliente.puntos - coste
+            let result = cliente.cliente.dinero - coste
             
             let codeCanje = uid.rnd(); 
 
             let mod = await clientesModel.updateOne(
                     { numberID: numberID },
                     {
-                    $set: { puntos: result },
+                    $set: { dinero: result },
 /*                     $push: { canjes: infoCanje } */
                     }
                     );
@@ -62,7 +65,58 @@ export class ClienteManager{
 
             return {codeCanje}
         } catch (error) {
-         return {error: `Error Interno ${error.message}`}           
+         return {error: `Error Interno - Contacte a un administrador`}           
         } 
     }
+
+
+
+  async confirmTransferencia(importe, cuentaDestino, numberID) {
+    try {
+
+        const clienteRemitenteRes = await this.getCliente(numberID);
+        if (clienteRemitenteRes.error) {
+            return { error: 'Error interno - Contacte a un administrador (remitente)' };
+        }
+        const clienteRemitente = clienteRemitenteRes.cliente;
+
+        if (clienteRemitente.dinero < importe) {
+            return { error: 'El importe que deseas transferir es mayor al saldo en tu cuenta.' };
+        }
+
+        const cuentaDestinoFull = cuentaDestino.startsWith('549') ? cuentaDestino : `549${cuentaDestino}`;
+        const clienteDestinoRes = await clientesModel.findOne({ numberID: cuentaDestinoFull });
+        if (!clienteDestinoRes) {
+            return { error: 'La cuenta destino no existe.' };
+        }
+
+        // 4. Calcular nuevos saldos
+        const saldoFinalDestino = clienteDestinoRes.dinero + importe;
+        const saldoFinalRemitente = clienteRemitente.dinero - importe;
+
+        // 5. Actualizar saldo del destino
+        const updateDestino = await clientesModel.updateOne(
+            { numberID: clienteDestinoRes.numberID },
+            { dinero: saldoFinalDestino }
+        );
+
+        // 6. Actualizar saldo del remitente
+        const updateRemitente = await clientesModel.updateOne(
+            { numberID: clienteRemitente.numberID },
+            { dinero: saldoFinalRemitente }
+        );
+
+        // 7. Verificar éxito de ambos updates
+        if (!updateDestino.modifiedCount || !updateRemitente.modifiedCount) {
+            return { error: 'Error al procesar la transferencia. Intente nuevamente.' };
+        }
+
+        return {
+            success: true,
+        };
+    } catch (error) {
+        return { error: 'Error interno - Contacte a un administrador' };
+    }
+}
+
 }

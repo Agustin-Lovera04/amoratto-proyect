@@ -29,7 +29,7 @@ export class ClienteController{
         }
 
         if(dinero.dinero === undefined ||dinero.dinero < coste){
-            return {error: 'No tienes suficiente saldo'}
+            return {error: 'No tienes suficiente saldo.'}
         }
 
         let modDinero = await clienteService.modDinero(numberID, coste,title)
@@ -56,15 +56,5 @@ export class ClienteController{
         }
 
         return product
-    }
-
-
-    static async confirmTransferencia(importe, cuentaDestino, numberID){
-        let transferencia = await clienteService.confirmTransferencia(importe,cuentaDestino,numberID)
-        if(transferencia.error){
-            return {error: transferencia.error}
-        }
-
-        return transferencia
     }
 }
